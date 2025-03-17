@@ -1,5 +1,18 @@
 extends layout
 
 block content
-  h1= title
-  p ihGEFFIYWEGF til #{title}
+  h1 Note App
+
+  form#noteForm
+    input#noteTitle(type="text" placeholder="Enter title" required)
+    textarea#noteText(placeholder="Write your note here...")
+    button(type="submit") Save Note
+
+  .container
+    .notes-list
+      h2 Notes
+      ul#noteList
+        each note in notes
+          li(data-id=note.id)
+            a(href=`/note/${note.id}`)= note.title
+            button.delete-btn Delete
