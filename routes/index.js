@@ -34,4 +34,9 @@ router.delete('/delete/:id', (req, res) => {
   });
 });
 
+// GET my notes page
+router.get('/myNotes', function(req, res, next) {
+  res.render('myNotes', { title: 'My Securenote' });
+});
+
 module.exports = router;

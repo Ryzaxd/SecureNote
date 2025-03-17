@@ -86,15 +86,8 @@ html(lang="en")
         textarea#noteText(rows="4" placeholder="Skriv din note her..." required)
         
         button(type="submit") Gem
+        a(href='/myNotes') Se noter
 
-      .notes-list
-        h2 Notes
-        ul#noteList
-          each note in notes
-            li(data-id=note.id)
-              a(href=`/note/${note.id}`)= note.title
-              button.delete-btn Slet
-
-      .system-message#systemMessage Systembeskeder vises her.
+      //- .system-message#systemMessage Systembeskeder vises her.
 
     script(src="/script.js")
