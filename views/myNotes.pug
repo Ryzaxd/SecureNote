@@ -1,18 +1,17 @@
 extends layout
 
 block content
-  h2 My Notes
-  p Here are your notes.
-  // Add more HTML and Pug content as needed
+  h1 Mine Noter
 
-body   
-h1 My notes 
-.container 
+  .container
+    h2 Liste over noter
 
-.notes-list
-        h2 Notes
-        ul#noteList
-          each note in notes
-            li(data-id=note.id)
-              a(href=`/note/${note.id}`)= note.title
-              button.delete-btn Slet
+    ul#noteList
+      each note in notes
+        li(data-id=note.id)
+          a(href=`/note/${note.id}`)= note.title
+          form(method="POST" action=`/delete/${note.id}`)
+            button.delete-btn(type="submit") Slet
+
+    a(href="/")
+      button Tilbage

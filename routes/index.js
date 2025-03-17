@@ -26,17 +26,18 @@ router.get('/note/:id', (req, res) => {
   });
 });
 
-
-router.delete('/delete/:id', (req, res) => {
+router.post('/delete/:id', (req, res) => {
   db.run("DELETE FROM notes WHERE id = ?", [req.params.id], function (err) {
     if (err) return res.status(500).json({ error: "Delete failed" });
-    res.json({ success: true });
+    res.redirect('/mynotes');
   });
 });
 
-// GET my notes page
-router.get('/myNotes', function(req, res, next) {
-  res.render('myNotes', { title: 'My Securenote' });
+router.get('/mynotes', (req, res) => {
+  db.all("SELECT * FROM notes ORDER BY id DESC", [], (err, notes) => {
+    if (err) return res.status(500).send("Database error");
+    res.render('myNotes', { title: 'Mine Noter', notes });
+  });
 });
 
 module.exports = router;
