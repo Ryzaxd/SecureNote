@@ -1,11 +1,11 @@
-# 📝 Secure Note App  
+# 📝 SecureNote
 
-<img src="https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/School-Clipart/Sticky_Note_PNG_Clip_Art_Image.png?m=1629814384" width="150">  
+<img src="https://github.com/Ryzaxd/SecureNote/blob/main/public/images/securenote.png" width="500">  
 
-En simpel note-app med **Node.js, Express, SQLite og Pug**.  
+En simpel *usikker* note app lavet i/med **Node.js, Express, sequelize(ORM), SQLite3**.  
 
 ## 🚀 Installation  
-1. **Installer Node.js & SQLite**  
-2. **Download projektet:** `git clone https://github.com/Ryzaxd/SecureNote .git && cd secure-note-app`  
-3. **Installer afhængigheder & start serveren:** `npm install && node server.js`  
-4. **Åbn i browser:** `http://localhost:3000`  
+1. **Installer Node.js**  
+2. **Download projektet:** `git clone https://github.com/Ryzaxd/SecureNote .git` & `cd securenote`  
+3. **Installer afhængigheder & start serveren:** `npm install` & `npm start`  
+4. **Åbn i browser:** `http://localhost:8080`  
