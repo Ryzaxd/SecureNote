@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
 var app = require('../app');
 var debug = require('debug')('securenote:server');
 var http = require('http');
@@ -94,3 +90,8 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+=======
+const PORT = process.env.PORT || 3000;
+const server = http.createServer(app);
+
+server.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));

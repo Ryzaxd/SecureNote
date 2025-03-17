@@ -1,3 +1,4 @@
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -11,7 +12,8 @@ const bcrypt = require('bcrypt');
 
 var indexRouter = require('./routes/index');
 
-var app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Initialize SequelizeStore with the sequelize instance
 const sessionStore = new SequelizeStore({
@@ -51,6 +53,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes setup
 app.use('/', indexRouter);
+
 app.use('/login', indexRouter);
 app.use('/register', indexRouter);
 app.use('/logout', indexRouter);

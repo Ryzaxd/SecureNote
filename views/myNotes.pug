@@ -1,14 +1,8 @@
-doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title Simple Note App
-
-
-block content
-  h1 Velkommen til #{title}
-  img#logo(src="./images/securenote.png")
 
     style.
       body {
@@ -78,21 +72,16 @@ block content
       }
 
   body
-    h1 Note App
+    block content
+      h1 Mine Noter
 
-    .container
-      h2 (Not so) Secure Note!
-      
-      form#noteForm
-        label Titel:
-        input#noteTitle(type="text" placeholder="Skriv din titel her" required)
-        
-        label Tekst:
-        textarea#noteText(rows="4" placeholder="Skriv din note her..." required)
-        
-        button(type="submit") Gem
-        a(href='/myNotes') Se noter
+      .container
+        ul#noteList
+          each note in notes
+            li(data-id=note.id)
+              a(href=`/note/${note.id}`)= note.title
+              form(method="POST" action=`/delete/${note.id}`)
+                button.delete-btn(type="submit") Slet
 
-      //- .system-message#systemMessage Systembeskeder vises her.
-
-    script(src="/script.js")
+        a(href="/")
+          button Tilbage
