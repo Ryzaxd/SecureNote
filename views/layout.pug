@@ -10,7 +10,9 @@ html
           li
             a.securenote(href='/') SecureNote
           li
-            a.button(href='#') Mine noter  
+            a.button(href='/note/create') Opret note  
+          li
+            a.button(href='/note/overview') Mine noter         
 
   body
     block content
@@ -18,8 +20,4 @@ html
   footer
     p Copyright © 2025 SecureNote
 
-    link(rel="stylesheet", href="/stylesheets/style.css")
-  body
-    block content
-    script(src="/script.js")
 

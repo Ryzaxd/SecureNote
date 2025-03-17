@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+
+  form.save-note-form(action="/note/save", method="post")
+    .section
+      div.container
+        h2 Opret din note her. 
+
+        div.input-group
+          label(for="title") Titel:
+          input#title(type="text", name="title", required)
+
+        div.input-group
+          label(for="note") Note:
+          textarea#note(name="note", required)
+
+    div.button-group
+      button.submit-button(type="submit") Opret
+
+      a.button(href="/") Tilbage

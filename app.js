@@ -10,6 +10,8 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const db = require('./models'); 
 const bcrypt = require('bcrypt');
 
+const app = express();
+
 var indexRouter = require('./routes/index');
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -53,6 +55,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes setup
 app.use('/', indexRouter);
+app.use('/note/create', indexRouter);
+app.use('/note/overview', indexRouter);
 
 app.use('/login', indexRouter);
 app.use('/register', indexRouter);

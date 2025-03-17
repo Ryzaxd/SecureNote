@@ -4,30 +4,37 @@ var sqlite3 = require('sqlite3').verbose();
 var db = require('../models');
 const bcrypt = require('bcrypt');
 const Users = require('../models').Users; 
+const Notes = require('../models').Notes;
 const isAuthenticated = require('../utils/authentication');
 
 /* GET home page. */
 router.get('/', isAuthenticated, function(req, res, next) {
   res.render('index', { title: 'Securenote' });
-
-router.get('/', (req, res) => {
-  db.all("SELECT * FROM notes ORDER BY id DESC", [], (err, notes) => {
-    if (err) return res.status(500).send("Database error");
-    res.render('index', { title: 'Notes', notes });
-  });
 });
 
-router.post('/save', (req, res) => {
-  const { title, text } = req.body;
-  if (!title.trim()) return res.json({ error: 'Title required' });
-
-  db.run("INSERT INTO notes (title, text) VALUES (?, ?)", [title, text], function (err) {
-    if (err) return res.status(500).json({ error: "Save failed" });
-    res.json({ success: true, id: this.lastID });
-  });
+/* GET create note. */
+router.get('/note/create', isAuthenticated, function(req, res, next) {
+  res.render('note/create', { title: 'Securenote' });
 });
 
-router.get('/note/:id', (req, res) => {
+/* POST create note. */
+router.post('/note/save', isAuthenticated, async function(req, res, next) {
+  try {
+    await Notes.create({
+      title: req.body.title,
+      note: req.body.note,
+      user_id: req.session.user.id
+    });
+    res.redirect('/note/overview');
+  } catch (error) {
+    console.error('Error during note creation:', error);
+    res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
+  }
+});
+
+
+
+/*router.get('/note/:id', (req, res) => {
   db.get("SELECT * FROM notes WHERE id = ?", [req.params.id], (err, note) => {
     if (err || !note) return res.status(404).send("Note not found");
     res.render('note', { title: note.title, note });
@@ -46,7 +53,7 @@ router.get('/mynotes', (req, res) => {
     if (err) return res.status(500).send("Database error");
     res.render('myNotes', { title: 'Mine Noter', notes });
   });
-});
+}); */
 
 // GET login
 router.get('/login', (req, res) => {
@@ -58,7 +65,7 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await Users.findOne({ where: { username: username }, attributes: ['username', 'password'] });
+    const user = await Users.findOne({ where: { username: username }, attributes: ['id', 'username', 'password'] });
 
     if (!user) {
       // User not found
@@ -70,7 +77,7 @@ router.post('/login', async (req, res) => {
     console.log('Password valid:', isPasswordValid);
 
     if (isPasswordValid) {
-      req.session.user = { username: user.username };
+      req.session.user = { id: user.id, username: user.username };
       req.session.save((err) => {
         if (err) {
           console.error('Session save error:', err);
@@ -121,7 +128,7 @@ router.post('/register', async (req, res) => {
     });
 
     // Set the session and redirect to the home page
-    req.session.user = { username: newUser.username };
+    req.session.user = { id: newUser.id, username: newUser.username };
     req.session.save((err) => {
       if (err) {
         console.error('Session save error:', err);

@@ -1,79 +1,325 @@
+
+/* Navbar style til layout */
+
+header {
+  background-color: #A8C4C7;
+  color: #fff;
+  padding: 10px 0;
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100; 
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav li {
+  display: inline;
+  margin-right: 20px;
+}
+
+.securenote {
+  font-family: 'Arial', sans-serif;
+  font-size: 2em;
+  color: #ffffff;
+  text-decoration: none;
+  letter-spacing: 0.1em; 
+  text-align: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: #326D7A; 
+  padding: 10px 20px; 
+  border-radius: 5px; 
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+  transition: all 0.3s ease; 
+}
+
+.securenote:hover {
+  background-color: #408291; 
+  color: #ffffff; 
+}
+
+/* a.button generalt */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #326D7A;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px #999;
+}
+
+.button:hover {background-color: #408291}
+
+.button:active {
+  background-color: #275c68;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+
+/* body generelt */
 body {
   font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: #ffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* footer i layout.pug */
+footer {
+  background-color: #ffff;
+  color: #000000;
+  text-align: center;
+  padding: 10px 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  position: relative;
+  margin-top: 30px;
+}
+
+/* generelt */
+.container {
+  max-width: 600px;
+  margin: 20px auto;
   padding: 20px;
-  max-width: 800px;
+  background: #326D7A;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+/* logo generelt */
+#logo {
+  font-size: 1.5em;
+  margin: 0;
+  font-weight: bold;
+  color: #4CAF50;
+  text-shadow: 2px 2px 4px #000000; 
+  font-family: 'Arial', sans-serif; 
+  text-transform: uppercase; 
+  text-align: center;
+  max-width: 300px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* generelt h1 */
+h1 {
+  font-size: 2em;
+  color: #000000;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif; 
+}
+
+/* generelt h2 */
+h2 {
+  color: #000000;
+  border-bottom: 2px solid #e9eff3;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif; 
+  
+}
+
+/* Center the paragraph */
+.centered {
+  text-align: center;
+  margin: 20px auto;
+}
+
+/* generelt */
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #326D7A; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border-radius: 5px;
+  color: #000000; 
+  font-weight: bold;
+}
+
+.container h2 {
+  text-align: left;
+  border-bottom: 2px solid #000000;
+}
+
+.input-group label {
+  text-align: left; 
+}
+
+.input-group input {
+  width: 100%; 
+}
+
+/* input, textarea, and select elements */
+input, textarea, select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* larger height for the textarea */
+textarea {
+  height: 150px;
+  width: 100%; 
+}
+
+/* submit button til create */
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px; 
+  margin-top: 20px;
+}
+
+button.submit-button {
+  display: inline-block;
+  padding: 14px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #094909;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+button.submit-button:hover {background-color: #3e8e41}
+
+button.submit-button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+/* visPakkeID */
+.lead {
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.package-id {
+  font-size: 2em;
+  text-align: center;
+  color: #000000;
+}
+
+.container2 {
+  margin-top: auto;
+  width: 50%;
   margin: auto;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+/* generelt */
+.section {
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
-input, textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 8px 12px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 4px;
+button.spor-button {
+  display: inline-block;
+  padding: 14px 20px;
+  font-size: 16px;
+  text-align: center;
   cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #094909;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
 }
 
-.container {
-  display: flex;
-  gap: 20px;
+button.spor-button:hover {background-color: #3e8e41}
+
+button.spor-button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 
-.notes-list {
-  width: 40%;
+/* login button */
+
+button.login-button {
+  display: inline-block;
+  padding: 14px 22px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #094909;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
 }
 
-.note-display {
-  width: 60%;
-  border: 1px solid #ccc;
-  padding: 10px;
-  min-height: 200px;
+button.login-button:hover {background-color: #3e8e41}
+
+button.login-button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+/* oversigt */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-family: Arial, sans-serif; 
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+  border-radius: 5px; 
 }
 
-li {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px;
+th, td {
+  padding: 15px;
+  text-align: left;
   border-bottom: 1px solid #ddd;
 }
 
-.open-btn, .delete-btn {
-  margin-left: 10px;
-  padding: 5px;
-  cursor: pointer;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 3px;
+th {
+  background-color: #f2f2f2;
+  text-transform: uppercase;
+  letter-spacing: 0.03em; 
 }
 
-.open-btn {
-  background-color: #28a745;
-}
-
-.open-btn:hover {
-  background-color: #218838;
-}
-
-.delete-btn:hover {
-  background-color: #c82333;
+tr:hover { 
+  background-color: #f5f5f5;
 }
