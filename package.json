@@ -7,8 +7,8 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "connect-session-sequelize": "^7.1.7",
     "body-parser": "^1.20.3",
+    "connect-session-sequelize": "^7.1.7",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "^4.21.2",
