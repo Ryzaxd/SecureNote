@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h2 My Notes
+  p Here are your notes.
+  // Add more HTML and Pug content as needed
+
+body   
+h1 My notes 
+.container 
+
+.notes-list
+        h2 Notes
+        ul#noteList
+          each note in notes
+            li(data-id=note.id)
+              a(href=`/note/${note.id}`)= note.title
+              button.delete-btn Slet
