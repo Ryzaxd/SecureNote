@@ -1,2 +1,2 @@
 /node_modules
-/db/development.sqlite3
+db/development.sqlite3

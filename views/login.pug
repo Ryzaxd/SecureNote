@@ -1,9 +1,10 @@
 block content
+  link(rel='stylesheet', href='/stylesheets/style.css')
   
   form.user.form(action="/login", method="post")
     .section
       div.container
-        h1 Bruger Login
+        h1 SecureNote Login
 
         div.input-group
           label(for="username") Username:
@@ -15,7 +16,5 @@ block content
 
     div.button-group
       button.login-button(type="submit") Login
-
-      a.button(href="/") Tilbage
 
       a.button(href="/register") Registrer
