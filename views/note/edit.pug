@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+
+  form.update-note-form(action=`/note/edit/${note.id}` method="POST")
+    .section
+      div.container
+        h2 Rediger note. 
+
+        div.input-group
+          label(for="title") Titel:
+          input#title(type="text", name="title", value=note.title required)
+
+        div.input-group
+          label(for="note") Note:
+          textarea#note(name="note" rows="10" required)= note.note
+
+    div.button-group
+      button.submit-button(type="submit") Gem
+
+      a.button(href="/note/overview") Tilbage

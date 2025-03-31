@@ -98,6 +98,7 @@ footer {
 /* generelt */
 .container {
   max-width: 600px;
+  width: 100%;
   margin: 20px auto;
   padding: 20px;
   background: #326D7A;
@@ -140,6 +141,26 @@ h2 {
   margin-bottom: 20px;
   font-family: 'Arial', sans-serif; 
   
+}
+
+p.note-content {
+  font-size: 1.2em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #000000;
+}
+
+p.note-meta {
+  font-size: 0.9em;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 /* Center the paragraph */
@@ -225,52 +246,12 @@ button.submit-button:active {
   transform: translateY(4px);
 }
 
-/* visPakkeID */
-.lead {
-  font-size: 1.5em;
-  text-align: center;
-}
-
-.package-id {
-  font-size: 2em;
-  text-align: center;
-  color: #000000;
-}
-
-.container2 {
-  margin-top: auto;
-  width: 50%;
-  margin: auto;
-}
-
 /* generelt */
 .section {
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
-button.spor-button {
-  display: inline-block;
-  padding: 14px 20px;
-  font-size: 16px;
-  text-align: center;
-  cursor: pointer;
-  text-decoration: none;
-  outline: none;
-  color: #fff;
-  background-color: #094909;
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 9px #999;
-}
-
-button.spor-button:hover {background-color: #3e8e41}
-
-button.spor-button:active {
-  background-color: #3e8e41;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-}
 
 /* login button */
 
@@ -322,4 +303,33 @@ th {
 
 tr:hover { 
   background-color: #f5f5f5;
+}
+
+.button-group-table {
+  gap: 15px;
+  display: flex;
+  justify-content: left;
+}
+
+.deletebutton {
+  display: inline-block;
+  padding: 13px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #b30505;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px #999;
+}
+
+.deletebutton:hover {background-color: #ca1c1c}
+
+.deletebutton:active {
+  background-color: #860606;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }

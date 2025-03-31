@@ -57,6 +57,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', indexRouter);
 app.use('/note/create', indexRouter);
 app.use('/note/overview', indexRouter);
+app.use('/note/show', indexRouter);
+app.use('/note/edit', indexRouter);
 
 app.use('/login', indexRouter);
 app.use('/register', indexRouter);

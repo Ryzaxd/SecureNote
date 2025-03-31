@@ -1,87 +1,28 @@
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title Simple Note App
+extends ../layout
 
-    style.
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #10A6B5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        flex-direction: column;
-      }
-      .container {
-        background: #18C5D8;
-        padding: 20px;
-        border-radius: 10px;
-        width: 400px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        text-align: center;
-      }
-      h1 {
-        margin-bottom: 10px;
-        color: white;
-      }
-      h2 {
-        color: #000;
-      }
-      input, textarea {
-        width: 100%;
-        margin: 5px 0;
-        padding: 8px;
-        border: none;
-        border-radius: 5px;
-      }
-      button {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        background-color: #007BFF;
-        color: white;
-      }
-      .notes-list {
-        margin-top: 20px;
-        background: #E0F7FA;
-        padding: 10px;
-        border-radius: 5px;
-      }
-      ul {
-        list-style-type: none;
-        padding: 0;
-      }
-      li {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-      }
-      .delete-btn {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        padding: 5px;
-      }
+block content
+  h1 Mine Noter
+  p.centered Her kan du se dine noter.
+  table
+    thead
+      tr
+        th Titel
+        th Note
+        th Oprettede
+        th Handlinger
 
-  body
-    block content
-      h1 Mine Noter
+    tbody
+      each note in notes
+        tr
+          td= note.title
+          td= note.note
+          td= note.formattedCreatedAt
+          td
+            div.button-group-table
+              a.button(href=`/note/show/${note.id}`) Vis
+              a.button(href=`/note/edit/${note.id}`) Rediger
+              form(action=`/note/delete/${note.id}`, method='POST')
+                button.deletebutton(type='submit') Slet
 
-      .container
-        ul#noteList
-          each note in notes
-            li(data-id=note.id)
-              a(href=`/note/${note.id}`)= note.title
-              form(method="POST" action=`/delete/${note.id}`)
-                button.delete-btn(type="submit") Slet
-
-        a(href="/")
-          button Tilbage
+  div.button-group
+    a.button(href="/") Tilbage

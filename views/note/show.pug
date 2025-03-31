@@ -1,7 +1,11 @@
-extends layout
+extends ../layout
 
 block content
-  h1= note.title
-  p= note.text
+  .container
+    h1= note.title
+    p.note-content= note.note
+    p.note-meta Bruger: #{note.username}
+    p.note-meta Oprettet: #{note.formattedCreatedAt}
 
-  a(href="/") Back to Notes
+  div.button-group
+    a.button(href="/note/overview") Tilbage

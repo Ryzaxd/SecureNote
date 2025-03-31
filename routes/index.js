@@ -32,6 +32,120 @@ router.post('/note/save', isAuthenticated, async function(req, res, next) {
   }
 });
 
+/* GET note overview. */
+router.get('/note/overview', isAuthenticated, async function(req, res, next) {
+  try {
+    const notes = await Notes.findAll({
+      where: { user_id: req.session.user.id },
+      order: [['createdAt', 'DESC']]
+    });
+
+    // Format the createdAt field for each note
+    const formattedNotes = notes.map(note => ({
+      ...note.toJSON(),
+      formattedCreatedAt: note.createdAt.toLocaleString("da-DK", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      }).replace(/\./g, "-")
+    }));
+
+    res.render('note/overview', { title: 'Securenote', notes: formattedNotes });
+  } catch (error) {
+    console.error('Error fetching notes:', error);
+    res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
+  }
+});
+
+/* GET show note. */
+router.get('/note/show/:id', isAuthenticated, async function(req, res, next) {
+  try {
+    const noteId = req.params.id;
+    const note = await Notes.findOne({
+      where: { id: noteId, user_id: req.session.user.id },
+      include: [{ model: Users, attributes: ['username'] }] 
+    });
+
+    if (!note) {
+      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
+    }
+
+    res.render('note/show', { 
+      title: 'Securenote', 
+      note: {
+        title: note.title,
+        note: note.note, // Use `note` instead of `content` to match the template
+        username: note.User.username || 'Unknown', // Pass `username` directly
+        formattedCreatedAt: note.createdAt.toLocaleString("da-DK", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+        }).replace(/\./g, "-"),
+      } 
+    });
+  } catch (error) {
+    console.error('Error fetching note:', error);
+    res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
+  }
+});
+
+/* GET edit note. */
+router.get('/note/edit/:id', isAuthenticated, async function(req, res, next) {
+  try {
+    const noteId = req.params.id;
+    const note = await Notes.findOne({ where: { id: noteId, user_id: req.session.user.id } });
+
+    if (!note) {
+      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
+    }
+
+    res.render('note/edit', { title: 'Securenote', note: note });
+  } catch (error) {
+    console.error('Error fetching note for edit:', error);
+    res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
+  }
+});
+
+/* POST edit note. */
+router.post('/note/edit/:id', isAuthenticated, async function(req, res, next) {
+  try {
+    const noteId = req.params.id;
+    const note = await Notes.findOne({ where: { id: noteId, user_id: req.session.user.id } });
+
+    if (!note) {
+      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
+    }
+
+    // Update the note fields
+    await Notes.update(
+      { title: req.body.title, note: req.body.note },
+      { where: { id: noteId, user_id: req.session.user.id } }
+    );
+
+    res.redirect('/note/overview');
+  } catch (error) {
+    console.error('Error updating note:', error);
+    res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
+  }
+});
+
+/* DELETE note. */
+router.post('/note/delete/:id', isAuthenticated, async function(req, res, next) {
+  try {
+    const noteId = req.params.id;
+    const note = await Notes.findOne({ where: { id: noteId, user_id: req.session.user.id } });
+
+    if (!note) {
+      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
+    }
+
+    await note.destroy();
+    res.redirect('/note/overview');
+  } catch (error) {
+    console.error('Error deleting note:', error);
+    res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
+  }
+});
 
 
 /*router.get('/note/:id', (req, res) => {
