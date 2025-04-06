@@ -2,8 +2,8 @@ doctype html
 html
   head
     title= title
-    
     link(rel='stylesheet', href='/stylesheets/style.css')
+  body
     header
       nav
         ul
@@ -12,12 +12,12 @@ html
           li
             a.button(href='/note/create') Opret note  
           li
-            a.button(href='/note/overview') Mine noter         
+            a.button(href='/note/overview') Mine noter
+          li
+            form(action='/logout', method='POST')
+              button.logout-button(type='submit') Log ud
 
-  body
     block content
 
-  footer
-    p Copyright © 2025 SecureNote
-
-
+    footer
+      p Copyright © 2025 SecureNote

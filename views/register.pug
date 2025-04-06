@@ -1,33 +1,34 @@
-block content
+doctype html
+html
+  head
+    title Bruger Registrering
+    link(rel='stylesheet', href='/stylesheets/register.css')
+  body
+    form.register-form(action="/register", method="post")
+      .container
+        h1 Bruger Registrering
 
-    form.user.form(action="/register", method="post")
-        .section
-        div.container
-            h1 Bruger Registrering
-    
-            div.input-group
-            label(for="username") Username:
-            input(type="text", id="username", name="username", placeholder="Dit username", required)
+        .input-group
+          label(for="username") Username:
+          input#username(type="text", name="username", placeholder="Dit username", required)
 
-            div.input-group
-            label(for="firstName") Fornavn:
-            input(type="text", id="firstName", name="firstName", placeholder="Dit fornavn", required)
+        .input-group
+          label(for="firstName") Fornavn:
+          input#firstName(type="text", name="firstName", placeholder="Dit fornavn", required)
 
-            div.input-group
-            label(for="lastName") Efternavn:
-            input(type="text", id="lastName", name="lastName", placeholder="Dit efternavn", required)
+        .input-group
+          label(for="lastName") Efternavn:
+          input#lastName(type="text", name="lastName", placeholder="Dit efternavn", required)
 
-            div.input-group
-            label(for="email") Email:
-            input(type="email", id="email", name="email", placeholder="Din email", required)
-    
-            div.input-group
-            label(for="password") Password:
-            input(type="password", id="password", name="password", placeholder="Dit password", required)
-    
-        div.button-group
-        button.login-button(type="submit") Registrer
-    
-        a.button(href="/") Tilbage
-    
-        a.button(href="/login") Login
+        .input-group
+          label(for="email") Email:
+          input#email(type="email", name="email", placeholder="Din email", required)
+
+        .input-group
+          label(for="password") Password:
+          input#password(type="password", name="password", placeholder="Dit password", required)
+
+        .button-group
+          button.login-button(type="submit") Registrer
+          a.button(href="/") Tilbage
+          a.button(href="/login") Login

@@ -333,3 +333,17 @@ tr:hover {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
+
+.logout {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.logout-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}

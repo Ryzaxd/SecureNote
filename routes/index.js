@@ -256,4 +256,18 @@ router.post('/register', async (req, res) => {
   }
 });
 
+
+// POST logout
+router.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Session destroy error:', err);
+      return res.render('error', { title: 'Securenote', message: 'Kunne ikke logge ud' });
+    }
+    res.clearCookie('connect.sid'); 
+    res.redirect('/login');
+  });
+});
+
+
 module.exports = router;
