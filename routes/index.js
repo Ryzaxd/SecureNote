@@ -147,6 +147,34 @@ router.post('/note/delete/:id', isAuthenticated, async function(req, res, next) 
   }
 });
 
+router.get('/note/shared/:id', async (req, res) => {
+  try {
+    const noteId = req.params.id;
+    const note = await Notes.findOne({ where: { id: noteId } });
+
+    if (!note) {
+      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
+    }
+
+    res.render('note/show', { 
+      title: 'Shared Note', 
+      note: {
+        title: note.title,
+        note: note.note,
+        username: 'Shared User',
+        formattedCreatedAt: note.createdAt.toLocaleString("da-DK", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+        }).replace(/\./g, "-"),
+        isShared: true // Pass the flag to indicate the note is shared
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching shared note:', error);
+    res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
+  }
+});
 
 /*router.get('/note/:id', (req, res) => {
   db.get("SELECT * FROM notes WHERE id = ?", [req.params.id], (err, note) => {

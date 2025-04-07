@@ -7,5 +7,9 @@ block content
     p.note-meta Bruger: #{note.username}
     p.note-meta Oprettet: #{note.formattedCreatedAt}
 
+    // Add this block to show a message for shared notes
+    if note.isShared
+      p.note-share-message Kopier URL'en for at dele denne note med andre.
+
   div.button-group
     a.button(href="/note/overview") Tilbage

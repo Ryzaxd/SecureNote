@@ -20,9 +20,11 @@ block content
           td
             div.button-group-table
               a.button(href=`/note/show/${note.id}`) Vis
+              a.button(href=`/note/shared/${note.id}`) Del
               a.button(href=`/note/edit/${note.id}`) Rediger
               form(action=`/note/delete/${note.id}`, method='POST')
                 button.deletebutton(type='submit') Slet
+              
 
   div.button-group
     a.button(href="/") Tilbage
