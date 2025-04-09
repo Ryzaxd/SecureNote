@@ -109,7 +109,7 @@ router.get('/note/edit/:id', isAuthenticated, async function(req, res, next) {
 /* POST edit note. */
 router.post('/note/edit/:id', isAuthenticated, async function(req, res, next) {
   try {
-    const noteId = req.params.id;
+    const noteId = parseInt(req.params.id, 10);
     const note = await Notes.findOne({ where: { id: noteId, user_id: req.session.user.id } });
 
     if (!note) {
@@ -147,6 +147,8 @@ router.post('/note/delete/:id', isAuthenticated, async function(req, res, next) 
   }
 });
 
+//* GET shared note. */
+// This route is for displaying a shared note. It does not require authentication.
 router.get('/note/shared/:id', async (req, res) => {
   try {
     const noteId = req.params.id;
@@ -176,26 +178,6 @@ router.get('/note/shared/:id', async (req, res) => {
   }
 });
 
-/*router.get('/note/:id', (req, res) => {
-  db.get("SELECT * FROM notes WHERE id = ?", [req.params.id], (err, note) => {
-    if (err || !note) return res.status(404).send("Note not found");
-    res.render('note', { title: note.title, note });
-  });
-});
-
-router.post('/delete/:id', (req, res) => {
-  db.run("DELETE FROM notes WHERE id = ?", [req.params.id], function (err) {
-    if (err) return res.status(500).json({ error: "Delete failed" });
-    res.redirect('/mynotes');
-  });
-});
-
-router.get('/mynotes', (req, res) => {
-  db.all("SELECT * FROM notes ORDER BY id DESC", [], (err, notes) => {
-    if (err) return res.status(500).send("Database error");
-    res.render('myNotes', { title: 'Mine Noter', notes });
-  });
-}); */
 
 // GET login
 router.get('/login', (req, res) => {

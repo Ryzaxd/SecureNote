@@ -60,6 +60,8 @@ nav li {
   border: none;
   border-radius: 15px;
   box-shadow: 0 8px #999;
+  font-family: 'Arial', sans-serif;
+  font-weight: normal;
 }
 
 .button:hover {background-color: #408291}
@@ -93,6 +95,7 @@ footer {
   width: 100%;
   position: relative;
   margin-top: 30px;
+  font-family: 'Arial', sans-serif;
 }
 
 /* generelt */
@@ -148,6 +151,7 @@ p.note-content {
   line-height: 1.6;
   margin-bottom: 20px;
   color: #000000;
+  font-family: 'Arial', sans-serif;
 }
 
 p.note-meta {
@@ -206,12 +210,16 @@ input, textarea, select {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  font-family: 'Arial', sans-serif;
+
 }
 
 /* larger height for the textarea */
 textarea {
   height: 150px;
   width: 100%; 
+  font-family: 'Arial', sans-serif;
+
 }
 
 /* submit button til create */
@@ -236,6 +244,8 @@ button.submit-button {
   border: none;
   border-radius: 15px;
   box-shadow: 0 9px #999;
+  font-family: 'Arial', sans-serif;
+
 }
 
 button.submit-button:hover {background-color: #3e8e41}
@@ -268,6 +278,8 @@ button.login-button {
   border: none;
   border-radius: 15px;
   box-shadow: 0 9px #999;
+  font-family: 'Arial', sans-serif;
+
 }
 
 button.login-button:hover {background-color: #3e8e41}
@@ -286,19 +298,26 @@ table {
   text-align: center;
   font-family: Arial, sans-serif; 
   box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-  border-radius: 5px; 
+  border-radius: 5px;
+  font-family: 'Arial', sans-serif;
+
 }
+
 
 th, td {
   padding: 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  font-family: 'Arial', sans-serif;
+
 }
 
 th {
   background-color: #f2f2f2;
   text-transform: uppercase;
   letter-spacing: 0.03em; 
+  font-family: 'Arial', sans-serif;
+
 }
 
 tr:hover { 
@@ -324,6 +343,8 @@ tr:hover {
   border: none;
   border-radius: 15px;
   box-shadow: 0 8px #999;
+  font-family: 'Arial', sans-serif;
+
 }
 
 .deletebutton:hover {background-color: #ca1c1c}
@@ -340,10 +361,28 @@ tr:hover {
 }
 
 .logout-button {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
+  display: inline-block;
+  padding: 13px 20px;
+  font-size: 16px;
+  text-align: center;
   cursor: pointer;
-  font-weight: bold;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px #999;
+  font-family: 'Arial', sans-serif;
+
+}
+
+.logout-button:hover {
+  background-color: #c0392b
+}
+
+.logout-button:active {
+  background-color: #c0392b;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }

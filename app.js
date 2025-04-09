@@ -9,13 +9,13 @@ const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const db = require('./models'); 
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 const app = express();
 
 var indexRouter = require('./routes/index');
 
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 // Initialize SequelizeStore with the sequelize instance
 const sessionStore = new SequelizeStore({
@@ -52,6 +52,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 // Routes setup
 app.use('/', indexRouter);
