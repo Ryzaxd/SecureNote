@@ -1,92 +1,74 @@
 #!/usr/bin/env node
 
-var app = require('../app');
-var debug = require('debug')('securenote:server');
-var http = require('http');
+const app = require('../app');
+const debug = require('debug')('securenote:server');
+const http = require('http');
 const db = require('../models');
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-db.sequelize.sync().then(() => {
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
-}).catch(error => {
-  console.error('Unable to connect to the database:', error);
-  process.exit(1);
-});
+const server = http.createServer(app);
 
 /**
- * Normalize a port into a number, string, or false.
+ * Start server after DB is ready
  */
+db.sequelize.authenticate()
+  .then(() => {
+    console.log('✅ DB connection successful');
+    return db.sequelize.sync({ alter: false });
+  })
+  .then(() => {
+    console.log('✅ Models synced (no destructive changes LETS GO)');
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+  })
+  .catch(err => {
+    console.error('❌ Sequelize failed to start:', err);
+    process.exit(1);
+  });
 
+/**
+ * Normalize a port
+ */
 function normalizePort(val) {
-  var port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
+  const port = parseInt(val, 10);
+  if (isNaN(port)) return val;
+  if (port >= 0) return port;
   return false;
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * Error handler
  */
-
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
+  if (error.syscall !== 'listen') throw error;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
-      break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
       process.exit(1);
-      break;
     default:
       throw error;
   }
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * Listening log
  */
-
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log(`🚀 Server is running on http://localhost:${port}`);
 }

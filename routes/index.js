@@ -1,24 +1,23 @@
-var express = require('express');
-var router = express.Router();
-var sqlite3 = require('sqlite3').verbose();
-var db = require('../models');
+const express = require('express');
+const router = express.Router();
+const db = require('../models');
 const bcrypt = require('bcrypt');
-const Users = require('../models').Users; 
-const Notes = require('../models').Notes;
+const Users = db.Users;
+const Notes = db.Notes;
 const isAuthenticated = require('../utils/authentication');
 
 /* GET home page. */
-router.get('/', isAuthenticated, function(req, res, next) {
+router.get('/', isAuthenticated, (req, res) => {
   res.render('index', { title: 'Securenote' });
 });
 
 /* GET create note. */
-router.get('/note/create', isAuthenticated, function(req, res, next) {
+router.get('/note/create', isAuthenticated, (req, res) => {
   res.render('note/create', { title: 'Securenote' });
 });
 
 /* POST create note. */
-router.post('/note/save', isAuthenticated, async function(req, res, next) {
+router.post('/note/save', isAuthenticated, async (req, res) => {
   try {
     await Notes.create({
       title: req.body.title,
@@ -26,258 +25,198 @@ router.post('/note/save', isAuthenticated, async function(req, res, next) {
       user_id: req.session.user.id
     });
     res.redirect('/note/overview');
-  } catch (error) {
-    console.error('Error during note creation:', error);
+  } catch (err) {
+    console.error('Error during note creation:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
 /* GET note overview. */
-router.get('/note/overview', isAuthenticated, async function(req, res, next) {
+router.get('/note/overview', isAuthenticated, async (req, res) => {
   try {
     const notes = await Notes.findAll({
       where: { user_id: req.session.user.id },
       order: [['createdAt', 'DESC']]
     });
 
-    // Format the createdAt field for each note
     const formattedNotes = notes.map(note => ({
       ...note.toJSON(),
       formattedCreatedAt: note.createdAt.toLocaleString("da-DK", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
+        year: "numeric", month: "numeric", day: "numeric"
       }).replace(/\./g, "-")
     }));
 
     res.render('note/overview', { title: 'Securenote', notes: formattedNotes });
-  } catch (error) {
-    console.error('Error fetching notes:', error);
+  } catch (err) {
+    console.error('Error fetching notes:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
 /* GET show note. */
-router.get('/note/show/:id', isAuthenticated, async function(req, res, next) {
+router.get('/note/show/:id', isAuthenticated, async (req, res) => {
   try {
-    const noteId = req.params.id;
     const note = await Notes.findOne({
-      where: { id: noteId, user_id: req.session.user.id },
-      include: [{ model: Users, attributes: ['username'] }] 
+      where: { id: req.params.id, user_id: req.session.user.id },
+      include: [{ model: Users, attributes: ['username'] }]
     });
 
-    if (!note) {
-      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
-    }
+    if (!note) return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
 
-    res.render('note/show', { 
-      title: 'Securenote', 
+    res.render('note/show', {
+      title: 'Securenote',
       note: {
         title: note.title,
-        note: note.note, // Use `note` instead of `content` to match the template
-        username: note.User.username || 'Unknown', // Pass `username` directly
+        note: note.note,
+        username: note.User.username || 'Unknown',
         formattedCreatedAt: note.createdAt.toLocaleString("da-DK", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-        }).replace(/\./g, "-"),
-      } 
+          year: "numeric", month: "numeric", day: "numeric"
+        }).replace(/\./g, "-")
+      }
     });
-  } catch (error) {
-    console.error('Error fetching note:', error);
+  } catch (err) {
+    console.error('Error fetching note:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
 /* GET edit note. */
-router.get('/note/edit/:id', isAuthenticated, async function(req, res, next) {
+router.get('/note/edit/:id', isAuthenticated, async (req, res) => {
   try {
-    const noteId = req.params.id;
-    const note = await Notes.findOne({ where: { id: noteId, user_id: req.session.user.id } });
+    const note = await Notes.findOne({ where: { id: req.params.id, user_id: req.session.user.id } });
 
-    if (!note) {
-      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
-    }
+    if (!note) return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
 
-    res.render('note/edit', { title: 'Securenote', note: note });
-  } catch (error) {
-    console.error('Error fetching note for edit:', error);
+    res.render('note/edit', { title: 'Securenote', note });
+  } catch (err) {
+    console.error('Error fetching note for edit:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
 /* POST edit note. */
-router.post('/note/edit/:id', isAuthenticated, async function(req, res, next) {
+router.post('/note/edit/:id', isAuthenticated, async (req, res) => {
   try {
     const noteId = parseInt(req.params.id, 10);
     const note = await Notes.findOne({ where: { id: noteId, user_id: req.session.user.id } });
 
-    if (!note) {
-      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
-    }
+    if (!note) return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
 
-    // Update the note fields
     await Notes.update(
       { title: req.body.title, note: req.body.note },
       { where: { id: noteId, user_id: req.session.user.id } }
     );
 
     res.redirect('/note/overview');
-  } catch (error) {
-    console.error('Error updating note:', error);
+  } catch (err) {
+    console.error('Error updating note:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
 /* DELETE note. */
-router.post('/note/delete/:id', isAuthenticated, async function(req, res, next) {
+router.post('/note/delete/:id', isAuthenticated, async (req, res) => {
   try {
-    const noteId = req.params.id;
-    const note = await Notes.findOne({ where: { id: noteId, user_id: req.session.user.id } });
+    const note = await Notes.findOne({ where: { id: req.params.id, user_id: req.session.user.id } });
 
-    if (!note) {
-      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
-    }
+    if (!note) return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
 
     await note.destroy();
     res.redirect('/note/overview');
-  } catch (error) {
-    console.error('Error deleting note:', error);
+  } catch (err) {
+    console.error('Error deleting note:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
-//* GET shared note. */
-// This route is for displaying a shared note. It does not require authentication.
+/* Shared note view */
 router.get('/note/shared/:id', async (req, res) => {
   try {
-    const noteId = req.params.id;
-    const note = await Notes.findOne({ where: { id: noteId } });
+    const note = await Notes.findOne({ where: { id: req.params.id } });
 
-    if (!note) {
-      return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
-    }
+    if (!note) return res.status(404).render('error', { title: 'Securenote', message: 'Note not found' });
 
-    res.render('note/show', { 
-      title: 'Shared Note', 
+    res.render('note/show', {
+      title: 'Shared Note',
       note: {
         title: note.title,
         note: note.note,
         username: 'Shared User',
         formattedCreatedAt: note.createdAt.toLocaleString("da-DK", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
+          year: "numeric", month: "numeric", day: "numeric"
         }).replace(/\./g, "-"),
-        isShared: true // Pass the flag to indicate the note is shared
+        isShared: true
       }
     });
-  } catch (error) {
-    console.error('Error fetching shared note:', error);
+  } catch (err) {
+    console.error('Error fetching shared note:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
-
-// GET login
+/* GET login */
 router.get('/login', (req, res) => {
   res.render('login', { title: 'Securenote' });
 });
 
-// POST login
+/* POST login */
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
   try {
-    const user = await Users.findOne({ where: { username: username }, attributes: ['id', 'username', 'password'] });
+    const user = await Users.findOne({ where: { username: req.body.username } });
+    if (!user) return res.redirect('/login');
 
-    if (!user) {
-      // User not found
-      console.log('User not found');
-      return res.redirect('/login');
-    }
+    const isMatch = await bcrypt.compare(req.body.password, user.password);
+    if (!isMatch) return res.redirect('/login');
 
-    const isPasswordValid = password === user.password;
-    console.log('Password valid:', isPasswordValid);
-
-    if (isPasswordValid) {
-      req.session.user = { id: user.id, username: user.username };
-      req.session.save((err) => {
-        if (err) {
-          console.error('Session save error:', err);
-          return res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
-        }
-        return res.redirect('/');
-      });
-    } else {
-      console.log('Invalid password');
-      return res.redirect('/login');
-    }
-  } catch (error) {
-    console.error('Error during login:', error);
+    req.session.user = { id: user.id, username: user.username };
+    req.session.save(err => {
+      if (err) throw err;
+      res.redirect('/');
+    });
+  } catch (err) {
+    console.error('Login error:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
-// GET register
+/* GET register */
 router.get('/register', (req, res) => {
   res.render('register', { title: 'Securenote' });
 });
 
-// POST register
+/* POST register */
 router.post('/register', async (req, res) => {
-  const { username, firstName, lastName, email, password } = req.body;
-
   try {
-    // Check if the username or email already exists
-    const existingUser = await Users.findOne({ where: { username: username } });
-    if (existingUser) {
-      console.log('Username already exists');
+    const { username, firstName, lastName, email, password } = req.body;
+
+    if (await Users.findOne({ where: { username } }) || await Users.findOne({ where: { email } })) {
       return res.redirect('/register');
     }
 
-    const existingEmail = await Users.findOne({ where: { email: email } });
-    if (existingEmail) {
-      console.log('Email already exists');
-      return res.redirect('/register');
-    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await Users.create({ username, firstName, lastName, email, password: hashedPassword });
 
-    // Create a new user
-    const newUser = await Users.create({
-      username: username,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password
+    req.session.user = { id: user.id, username: user.username };
+    req.session.save(err => {
+      if (err) throw err;
+      res.redirect('/');
     });
-
-    // Set the session and redirect to the home page
-    req.session.user = { id: newUser.id, username: newUser.username };
-    req.session.save((err) => {
-      if (err) {
-        console.error('Session save error:', err);
-        return res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
-      }
-      return res.redirect('/');
-    });
-  } catch (error) {
-    console.error('Error during registration:', error);
+  } catch (err) {
+    console.error('Registration error:', err);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });
 
-
-// POST logout
+/* POST logout */
 router.post('/logout', (req, res) => {
-  req.session.destroy((err) => {
+  req.session.destroy(err => {
     if (err) {
-      console.error('Session destroy error:', err);
-      return res.render('error', { title: 'Securenote', message: 'Kunne ikke logge ud' });
+      console.error('Logout error:', err);
+      return res.render('error', { title: 'Securenote', message: 'Could not log out' });
     }
-    res.clearCookie('connect.sid'); 
+    res.clearCookie('connect.sid');
     res.redirect('/login');
   });
 });
-
 
 module.exports = router;
