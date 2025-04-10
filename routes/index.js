@@ -159,22 +159,44 @@ router.get('/login', (req, res) => {
   res.render('login', { title: 'Securenote' });
 });
 
-/* POST login */
+// POST login
 router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  console.log(`[LOGIN ATTEMPT] Username: ${username}`);
+
   try {
-    const user = await Users.findOne({ where: { username: req.body.username } });
-    if (!user) return res.redirect('/login');
-
-    const isMatch = await bcrypt.compare(req.body.password, user.password);
-    if (!isMatch) return res.redirect('/login');
-
-    req.session.user = { id: user.id, username: user.username };
-    req.session.save(err => {
-      if (err) throw err;
-      res.redirect('/');
+    const user = await Users.findOne({
+      where: { username: username },
+      attributes: ['id', 'username', 'password']
     });
-  } catch (err) {
-    console.error('Login error:', err);
+
+    if (!user) {
+      console.warn(`[LOGIN FAILED] User not found: ${username}`);
+      return res.redirect('/login');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log(`[LOGIN VALIDATION] Password valid: ${isPasswordValid}`);
+
+    if (isPasswordValid) {
+      req.session.user = { id: user.id, username: user.username };
+
+      req.session.save(err => {
+        if (err) {
+          console.error(`[SESSION SAVE ERROR] ${err}`);
+          return res.render('error', { title: 'Securenote', message: 'Session Error' });
+        }
+
+        console.log(`[LOGIN SUCCESS] User ID: ${user.id}`);
+        return res.redirect('/');
+      });
+    } else {
+      console.warn(`[LOGIN FAILED] Invalid password for: ${username}`);
+      return res.redirect('/login');
+    }
+  } catch (error) {
+    console.error('[LOGIN ERROR]', error);
     res.render('error', { title: 'Securenote', message: 'Internal Server Error' });
   }
 });

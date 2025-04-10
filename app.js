@@ -28,23 +28,19 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.set('trust proxy', 1); 
 
-app.set('trust proxy', 1);
-
-// Sessions
-app.use(
-  session({
-    secret: 'your-random-secret-key',
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      domain: 'localhost',
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 24 * 3600000
-    }
+app.use(session({
+  secret: 'your-random-secret-key',
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax',
+    maxAge: 24 * 60 * 60 * 1000 
+  }
   })
 );
 
