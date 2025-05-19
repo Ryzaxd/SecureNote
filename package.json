@@ -17,7 +17,7 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1",
+    "morgan": "~1.10.0",
     "mssql": "^11.0.1",
     "nodemon": "^3.0.1",
     "pug": "^3.0.3",
